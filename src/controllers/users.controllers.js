@@ -22,9 +22,9 @@ export async function  updateusers (req, res){
     }
 }
 
-export async function  delete (req, res){
+export async function  deleteusers (req, res){
     try {
-        res.send("o eliminado")
+        res.send("usuario eliminado")
     } catch (error) {
         console.log(error)
     }
