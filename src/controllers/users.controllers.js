@@ -14,9 +14,9 @@ export async function  createusers (req, res){
     }
 }
 
-export async function  update (req, res){
+export async function  updateusers (req, res){
     try {
-        res.send("subir o")
+        res.send("usuario actualizado")
     } catch (error) {
         console.log(error)
     }
