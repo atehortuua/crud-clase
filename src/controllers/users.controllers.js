@@ -6,9 +6,9 @@ export async function getusers(req, res) {
     }
 }
 
-export async function  create (req, res){
+export async function  createusers (req, res){
     try {
-        res.send("o creado")
+        res.send("usuario creado")
     } catch (error) {
         console.log(error)
     }
