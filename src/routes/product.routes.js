@@ -9,4 +9,4 @@ routerProduct.put("/updateProduct", updateProduct)
 routerProduct.delete("/deleteProduct", deleteProduct)
 
 
-export default router 
+export default routerProduct; 
