@@ -1,6 +1,6 @@
-export async function getUsers(req, res) {
+export async function getproduct(req, res) {
     try {
-        res.send("todos los usuaruios")
+        res.send("todos los productos")
     } catch (error) {
         console.log(error)
     }
