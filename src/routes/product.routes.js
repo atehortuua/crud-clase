@@ -1,9 +1,9 @@
 import express from 'express'
-import { createProduct, createUsers, deleteUser, getproduct, getUsers, updateUser } from '../controllers/users.controllers.js';
+import { createProduct, createUsers, deleteUser, getproduct, getUsers, updateProduct, updateUser } from '../controllers/users.controllers.js';
 const router = express.Router();//permite crear las rutas
 
 
 router.get("/product", getproduct);
 router.post("/createProduct",  createProduct)
-router.put("/updateUser", updateUser)
+router.put("/updateProduct", updateProduct)
 router.delete("/deleteUser", deleteUser)

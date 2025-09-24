@@ -14,7 +14,7 @@ export async function  createProduct (req, res){
     }
 }
 
-export async function  updateUser (req, res){
+export async function  updateProduct (req, res){
     try {
         res.send("usuario actualizado")
     } catch (error) {
