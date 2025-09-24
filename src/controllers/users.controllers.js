@@ -21,3 +21,11 @@ export async function  updateUser (req, res){
         console.log(error)
     }
 }
+
+export async function  deleteUser (req, res){
+    try {
+        res.send("usuario eliminado")
+    } catch (error) {
+        console.log(error)
+    }
+}
