@@ -6,9 +6,9 @@ export async function getproduct(req, res) {
     }
 }
 
-export async function  createUsers (req, res){
+export async function  createProduct (req, res){
     try {
-        res.send("usuario creado")
+        res.send("producto creado")
     } catch (error) {
         console.log(error)
     }
