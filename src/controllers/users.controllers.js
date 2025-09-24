@@ -16,15 +16,15 @@ export async function  createProduct (req, res){
 
 export async function  updateProduct (req, res){
     try {
-        res.send("usuario actualizado")
+        res.send("subir producto")
     } catch (error) {
         console.log(error)
     }
 }
 
-export async function  deleteUser (req, res){
+export async function  deleteProduct (req, res){
     try {
-        res.send("usuario eliminado")
+        res.send("producto eliminado")
     } catch (error) {
         console.log(error)
     }
