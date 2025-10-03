@@ -1,6 +1,6 @@
 //importare express
 //escuchar puerto cors
-import express from 'express'; //module = javascript
+import express, { json } from 'express'; //module = javascript
 import { connectDB } from './src/config/db-config.js';
 // const express = require('express');//commonJs= node js
 import { configDotenv } from 'dotenv';
@@ -11,6 +11,8 @@ configDotenv()
 const app = express();
 
 connectDB();
+
+app.use( express.json());
 
 app.use(router)
 app.use(routerusers)
