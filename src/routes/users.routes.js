@@ -7,7 +7,7 @@ routerusers.get("/users", getusers);//obtener
 routerusers.get("/users/:id", getUserById)
 routerusers.post("/createusers", createusers  )//crear
 routerusers.put("/updateusers/:id", updateusers )//actualizar69
-routerusers.delete("/deleteusers", deleteusers )
+routerusers.delete("/deleteusers/:id", deleteusers )
 
 
 export default routerusers

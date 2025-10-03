@@ -6,6 +6,7 @@ import { connectDB } from './src/config/db-config.js';
 import { configDotenv } from 'dotenv';
 import router from './src/routes/product.routes.js';
 import routerusers from './src/routes/users.routes.js';
+import routerProduct from './src/routes/product.routes.js';
 
 configDotenv()
 const app = express();
@@ -16,6 +17,7 @@ app.use( express.json());
 
 app.use(router)
 app.use(routerusers)
+app.use(routerProduct)
 
 const port = process.env.PORT
 app.listen(port, ()=>{

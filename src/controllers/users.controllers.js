@@ -1,7 +1,7 @@
 
 import mongoose from "mongoose";
 import { UserModel } from "../models/users.models.js"
-
+import bcrypt from 'bcrypt'
 export async function getusers(req, res) {
     try {
         //metodos de consulta mongoose
@@ -39,7 +39,18 @@ export async function  createusers (req, res){
         if(userFound){
             return res.status(400).json({ok: false , msg : "correo ya registrado"})
         }
-        const user = await UserModel.create(data)
+        //encriptar password
+        const saltRounds = 10; //entre mas alto seguro 
+        const hashPasword = await bcrypt.hash(data.pasword, saltRounds);
+
+        const user = new UserModel({
+            name: data.name,
+            age: data.age,
+            email: data.email,
+            pasword: hashPasword
+        })
+
+        await user.save();
         return res.status(201).json({ok : true, user})
 
     } catch (error) {
@@ -55,6 +66,9 @@ export async function  updateusers (req, res){
        const data = req.body;
 
        const userUptade = await UserModel.findByIdAndUpdate(id, data, {new: true});
+       if(!userUptade){
+        return res.status(404).json({ok: false, msg : "error interno"})
+       }
        return res.status(200).json({ok: true, userUptade})
     } catch (error) {
         console.log(error)
@@ -65,7 +79,14 @@ export async function  updateusers (req, res){
 
 export async function  deleteusers (req, res){
     try {
-        res.send("usuario eliminado")
+        const id = req.params.id;
+
+        const deletedUser = await UserModel.findByIdAndDelete(id);
+        if(!deletedUser){
+            return res.status(404).json ({ok: false, msg : "usuario no encontrado"})
+        }
+        return res.status(200).json({ok:true, msg : "ususario eliminado"})
+        
     } catch (error) {
        return res.status(500).json({ok: false, msg:"error interno"})
         
