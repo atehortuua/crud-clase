@@ -32,33 +32,6 @@ export async function getUserById (req,res){
     }
 }
 
-export async function  createusers (req, res){
-    try {
-        const data = req.body;
-        const userFound = await UserModel.findOne({email : data.email});
-        if(userFound){
-            return res.status(400).json({ok: false , msg : "correo ya registrado"})
-        }
-        //encriptar password
-        const saltRounds = 10; //entre mas alto seguro 
-        const hashPasword = await bcrypt.hash(data.pasword, saltRounds);
-
-        const user = new UserModel({
-            name: data.name,
-            age: data.age,
-            email: data.email,
-            pasword: hashPasword
-        })
-
-        await user.save();
-        return res.status(201).json({ok : true, user})
-
-    } catch (error) {
-        console.log(error)
-       return res.status(500).json({ok: false, msg:"error interno"})
-        
-    }
-}
 
 export async function  updateusers (req, res){
     try {

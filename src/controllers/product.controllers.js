@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 import { productModel } from "../models/products.models.js";
 
+
+
+
+
+
 export async function getproduct(req, res) {
     try {
        const products = await productModel.find();
@@ -12,6 +17,27 @@ export async function getproduct(req, res) {
         return res.status(500).json ({ok: false, msg : "error interno"})
     }
 }
+export async function getProductsByCategory(req, res) {
+  try {
+    const { category } = req.params;
+    console.log("Categoría recibida:", category);
+
+    const products = await productModel.find({ category });
+    console.log("Productos encontrados:", products);
+
+    if (!products.length) {
+      return res.status(404).json({ ok: false, msg: "No hay productos con esta categoría" });
+    }
+
+    return res.status(200).json({ ok: true, products });
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ ok: false, msg: "Error interno del servidor" });
+  }
+}
+
+
+
 export async function getproductById (req,res){
     try {
         const id  = req.params.id;
@@ -72,3 +98,4 @@ export async function  deleteProduct (req, res){
         return res.status(500).json({ok: false, msg: "error interno"})
     }
 }
+
