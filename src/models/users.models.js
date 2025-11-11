@@ -23,7 +23,12 @@ const userSchema = new mongoose.Schema(
         password : {
             type : String,
             require: [true, "pasword requerida"],
-            minlength : [8, "la contraseña requiere min 8 caracteres"]
+            minlength : [8, "la contraseña requiere min 8 caracteres"],
+            verified : {
+                type: Boolean,
+                default: false,
+
+            },
             
         },
 
@@ -35,7 +40,9 @@ const userSchema = new mongoose.Schema(
         verified: {
             type : Boolean,
             default : false
-        }
+        },
+
+        verificationToken: String
 
 
 });
