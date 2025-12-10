@@ -23,7 +23,8 @@ if (!result.ok){
     });
 }
 
-req.user = result.payload;
+req.userId = result.payload.id;
+
 next();
 
 }

@@ -1,57 +1,21 @@
-
 import mongoose from "mongoose";
-import { UserModel } from "../models/users.models.js"
-import transporter from "../config/nodemailer.js"
+import dotenv from "dotenv";
+import { UserModel } from "../models/users.models.js";
 
 
-
-export const registerUser = async (req , res) => {
-    try {
-        const {name, email, password} = req.body;
-
-        const existingUser = await UserModel.findOne({email});
-        if (existingUser) return res.status(400).json({ message: "El correo ya esta registrado "});
-
-
-        const token = jwt.sign({email}, process.env.JWT_SECRET, {expiresIn: "1h"});
-
-        const newUser = new UserModel({
-                name, 
-                email,
-                password,
-                verificationToken : token,
-        });
-        await newUser.save();
-
-        const verificationTokenLink = `http://localhost:3000/api/users/verify/${token}`;
-
-        await transporter.sendMail({
-            from: `"Verificación" <${process.env.EMAIL_USER}>`,
-            to : email,
-            subject : "verifica tu cuenta",
-            html: `<p> Hola ${name}, Hola Bienvenido a Burguer Master mil gracias por participar y hacer parte de de este hermoso barrio. Para verifiacar da clic aqui</p>
-            <a href="${verificationTokenLink}">${verificationTokenLink}</a>`,
-        });
-
-        res.status(200).json({message:"usuario registrado. Revisa tu correo para verificar tu cuenta. "});
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Error al registrar el usuario" });
-        
-    }
-};
-
+dotenv.config();
 
 
 
 export async function getusers(req, res) {
     try {
         //metodos de consulta mongoose
-        const users = await UserModel.find();
+        const users = await UserModel.find(); //para que no se vean las contraseñas
         //estados http
         return res.status(200).json({ok: true, users})      
 
     } catch (error) {
+        console.log(error)
        return res.status(500).json({ok: false, msg:"error interno"})
     }
 }

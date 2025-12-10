@@ -2,53 +2,47 @@
 
 import mongoose from "mongoose";
 
-// crear schema y modelo 
-
 const userSchema = new mongoose.Schema(
     {
         name: {
-            type : String,
-            required: [true, "El nombre es obligatorio"]
+            type: String,
+            required: [true, "El nombre es obligatorio"],
         },
-      
+
         email: {
             type: String,
-            required :[true, "el correo es obligatorio"],
-            unique : true,
+            required: [true, "El correo es obligatorio"],
+            unique: true,
             lowercase: true,
-            trim : true,
-            match: [/^\S+@\S+\.\S+$/, 'Email inválido']
+            trim: true,
+            match: [/^\S+@\S+\.\S+$/, "Email inválido"],
         },
 
-        password : {
-            type : String,
-            require: [true, "pasword requerida"],
-            minlength : [8, "la contraseña requiere min 8 caracteres"],
-            verified : {
-                type: Boolean,
-                default: false,
-
-            },
-            
+        password: {
+            type: String,
+            required: [true, "Password requerida"],
+            minlength: [8, "La contraseña requiere min 8 caracteres"],
         },
 
-        role : { 
-            type : String,
-            enum: ['cliente', 'owner', 'admin'],
-            default : 'cliente'
+        role: {
+            type: String,
+            enum: ["cliente", "owner", "admin"],
+            default: "cliente",
         },
+
         verified: {
-            type : Boolean,
-            default : false
+            type: Boolean,
+            default: false,
         },
 
-        verificationToken: String
+        verificationToken: {
+            type: String,
+        },
+    },
+    { timestamps: true }
+);
 
-
-});
-
-
-export const UserModel = mongoose.model('User', userSchema)
+export const UserModel = mongoose.model("User", userSchema);
 
 
 // {

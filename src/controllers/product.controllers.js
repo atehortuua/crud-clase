@@ -37,6 +37,25 @@ export async function getProductsByCategory(req, res) {
 }
 
 
+export const getProductsByUser = async (req, res) => {
+    try {
+        const userId = req.user.userFound._id;
+
+        const products = await productModel.find({ userId });
+
+        return res.json({
+            ok: true,
+            total: products.length,
+            products
+        });
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ ok: false, msg: "Error interno" })
+    }
+};
+
+
 
 export async function getproductById (req,res){
     try {
@@ -59,6 +78,8 @@ export async function getproductById (req,res){
 export async function  createProduct (req, res){
     try {
         const data = req.body;
+        const idUser = req.user.userFound._id;
+        data.userId = idUser
         const product = await productModel.create(data);
         return res.status(201).json ({ok:true, product});
     } catch (error) {

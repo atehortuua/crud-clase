@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import transporter from "./src/config/nodemailer.js";
+import {transporter} from "./src/config/nodemailer.js";
 
 dotenv.config();
 

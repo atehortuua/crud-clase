@@ -3,7 +3,7 @@ import { addVote, getVotesByProduct , getVoteCount } from "../controllers/vote.c
 
 const routerVotes = express.Router();
 
-routerVotes.post("/add", addVote);
+routerVotes.post("/add/:id", addVote);
 
 routerVotes.post("/:productId", getVotesByProduct);
 
