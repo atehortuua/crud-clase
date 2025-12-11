@@ -20,13 +20,13 @@ export async function getproduct(req, res) {
 export async function getProductsByCategory(req, res) {
   try {
     const { category } = req.params;
-    console.log("Categoría recibida:", category);
+    console.log("Categor\u00eda recibida:", category);
 
     const products = await productModel.find({ category });
     console.log("Productos encontrados:", products);
 
     if (!products.length) {
-      return res.status(404).json({ ok: false, msg: "No hay productos con esta categoría" });
+      return res.status(404).json({ ok: false, msg: "No hay productos con esta categor\u00eda" });
     }
 
     return res.status(200).json({ ok: true, products });
@@ -39,7 +39,7 @@ export async function getProductsByCategory(req, res) {
 
 export const getProductsByUser = async (req, res) => {
     try {
-        const userId = req.user.userFound._id;
+        const userId = req.userId;
 
         const products = await productModel.find({ userId });
 
