@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import vote from "../models/vote.model.js";
 import { productModel } from "../models/products.models.js";
 
@@ -108,6 +109,32 @@ export const getVotesRanking = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Error al obtener el ranking" });
+  }
+};
+
+export const getVotesRankingByOwner = async (req, res) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.userId);
+
+    // Obtener todos los productos del owner
+    const ownerProducts = await productModel.find({ userId }).select('_id name image votes');
+
+    // Formatear la respuesta
+    const ranking = ownerProducts.map(product => ({
+      productId: product._id,
+      name: product.name,
+      image: product.image,
+      totalVotes: product.votes || 0
+    }));
+
+    // Ordenar por votos de mayor a menor
+    ranking.sort((a, b) => b.totalVotes - a.totalVotes);
+
+    res.status(200).json({ ok: true, ranking });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Error al obtener el ranking del owner" });
   }
 };
 
