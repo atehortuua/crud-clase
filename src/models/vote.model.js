@@ -1,18 +1,8 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose  from "mongoose";
 const voteSchema = new mongoose.Schema(
 {
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        required : true,
-    
-    },
-
-    product :  {
-        type: Schema.Types.ObjectId,
-        ref : "Product",
-        required : true,
-    }, 
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    product: { type: mongoose.Schema.Types.ObjectId, ref: "product", required: true}
 },
 {timestamps: true}
 );

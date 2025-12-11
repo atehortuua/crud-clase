@@ -40,17 +40,80 @@ export const addVote = async (req, res) =>{
 
 export const getVotesByProduct = async (req, res) => {
     try {
-        const {id} = req.params;
-        const votes = await vote.find({product : id}).populate("user", "name email");
+        const { productId } = req.params;
 
-        res.status(200).json(votes)
-    
+        const votesList = await vote.find({ product: productId })
+            .populate("user", "name email")
+            .populate("product", "name image");
+
+        res.status(200).json({
+            ok: true,
+            votes: votesList,
+            total: votesList.length
+        });
+
     } catch (error) {
-        console.log(e)
-        res.status(500).json({msg : "error al obtener los votos"});
-        
+        console.log(error);
+        res.status(500).json({ msg: "error al obtener los votos" });
     }
+
+    
 };
+export const getAllVotes = async (req, res) => {
+  try {
+    const votes = await vote
+      .find()
+      .populate("user", "name email")
+      .populate("product", "name");
+
+    res.status(200).json({ votes });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Error al obtener todos los votos" });
+  }
+};
+
+export const getVotesRanking = async (req, res) => {
+  try {
+    const ranking = await vote.aggregate([
+      {
+        $group: {
+          _id: "$product",
+          totalVotes: { $sum: 1 }
+        }
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "product"
+        }
+      },
+      { $unwind: "$product" },
+      {
+        $project: {
+          _id: 0,
+          productId: "$product._id",
+          name: "$product.name",
+          image: "$product.image",
+          totalVotes: 1
+        }
+      },
+      { $sort: { totalVotes: -1 } }
+    ]);
+
+    res.status(200).json({ ok: true, ranking });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Error al obtener el ranking" });
+  }
+};
+
+
+
+
 
 
 export const getVoteCount = async (req, res) => {
