@@ -40,7 +40,9 @@ export const registerUser = async (req, res) => {
             expiresIn: "24h",
         });
 
-        const verificationTokenLink = `http://localhost:3000/api/users/verify/${token}`;
+        
+        const verificationTokenLink = `http://localhost:4200/verify/${token}`;
+
 
          const saltRounds = 10; //entre mas alto seguro 
         const hashPasword = await bcrypt.hash(password, saltRounds);
@@ -61,7 +63,7 @@ export const registerUser = async (req, res) => {
             html: `
                 <p>Hola ${name}, gracias por registrarte en Burguer Master 🍔.</p>
                 <p>Para verificar tu cuenta, haz clic aquí:</p>
-                <a href="${verificationTokenLink}">${verificationTokenLink}</a>
+                <a href="${verificationTokenLink}">click Aqui</a>
             `,
         });
 
@@ -84,6 +86,9 @@ export async function login (req, res){
          
         if(!userFound){
             return res.status(404).json ({ok:false,msg:"correo no registrado"});
+        }
+        if(!userFound.verified){
+            return res.status(403).json({ok: false, msg : 'verifica tu cuenta primero'})
         }
 
         const isValid = await bcrypt.compare(password, userFound.password);
