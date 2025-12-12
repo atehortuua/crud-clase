@@ -24,7 +24,7 @@ export const verifyToken = async (req, res) => {
 
     } catch (error){
         console.log(error)
-    res.status(400).json({ message: "Token inválido o expirado" });
+    res.status(400).json({ message: "Token inv\u00e1lido o expirado" });
     }
 
 }
@@ -34,7 +34,7 @@ export const registerUser = async (req, res) => {
 
         const existingUser = await UserModel.findOne({ email });
         if (existingUser)
-            return res.status(400).json({ message: "El correo ya está registrado" });
+            return res.status(400).json({ message: "El correo ya est\u00e1 registrado" });
 
         const token = jwt.sign({ email }, process.env.JWT_SECRET, {
             expiresIn: "24h",
@@ -50,19 +50,20 @@ export const registerUser = async (req, res) => {
         const newUser = new UserModel({
             name,
             email,
-            password : hashPasword ,
+            password : hashPasword,
+            verificationToken: token
           
         });
 
         await newUser.save();
 
         await transporter.sendMail({
-            from: `"Verificación" <${process.env.EMAIL_USER}>`,
+            from: `"Verificaci\u00f3n" <${process.env.EMAIL_USER}>`,
             to: email,
             subject: "Verifica tu cuenta",
             html: `
-                <p>Hola ${name}, gracias por registrarte en Burguer Master 🍔.</p>
-                <p>Para verificar tu cuenta, haz clic aquí:</p>
+                <p>Hola ${name}, gracias por registrarte en Burguer Master \ud83c\udf54.</p>
+                <p>Para verificar tu cuenta, haz clic aqu\u00ed:</p>
                 <a href="${verificationTokenLink}">click Aqui</a>
             `,
         });
@@ -94,7 +95,7 @@ export async function login (req, res){
         const isValid = await bcrypt.compare(password, userFound.password);
 
         if(!isValid){
-          return res.status(400).json({ok: false , msg : "contraseña incorrecta"});  
+          return res.status(400).json({ok: false , msg : "contrase\u00f1a incorrecta"});  
         }
 
         const token = createToken({ id: userFound._id, email: userFound.email, verified : userFound.verified });
