@@ -1,33 +1,8 @@
 import { createToken } from "../helpers/jwt.js";
 import { UserModel } from "../models/users.models.js"
 import bcrypt from 'bcrypt'
-import { transporter } from "../config/nodemailer.js";
-import jwt from "jsonwebtoken";
 
 
-
-export const verifyToken = async (req, res) => {
-
- try{
-
-    const {token} = req.params;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    const  user =  await UserModel.findOne ({email : decoded.email});
-    if(!user) return res.status(404).json({ msg : "usuario no encontrado"});
-
-    user.verified = true;
-    user.verificationToken = null;
-    await user.save();
-
-    res.status(200).json({msg : "correo verificado con exito"})
-
-    } catch (error){
-        console.log(error)
-    res.status(400).json({ message: "Token inv\u00e1lido o expirado" });
-    }
-
-}
 export const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -36,40 +11,19 @@ export const registerUser = async (req, res) => {
         if (existingUser)
             return res.status(400).json({ message: "El correo ya est\u00e1 registrado" });
 
-        const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-            expiresIn: "24h",
-        });
-
-        
-        const verificationTokenLink = `http://localhost:4200/verify/${token}`;
-
-
-         const saltRounds = 10; //entre mas alto seguro 
+        const saltRounds = 10;
         const hashPasword = await bcrypt.hash(password, saltRounds);
 
         const newUser = new UserModel({
             name,
             email,
-            password : hashPasword,
-            verificationToken: token
-          
+            password: hashPasword
         });
 
         await newUser.save();
 
-        await transporter.sendMail({
-            from: `"Verificaci\u00f3n" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: "Verifica tu cuenta",
-            html: `
-                <p>Hola ${name}, gracias por registrarte en Burguer Master \ud83c\udf54.</p>
-                <p>Para verificar tu cuenta, haz clic aqu\u00ed:</p>
-                <a href="${verificationTokenLink}">click Aqui</a>
-            `,
-        });
-
         res.status(200).json({
-            message: "Usuario registrado. Revisa tu correo para verificar tu cuenta.",
+            message: "Usuario registrado exitosamente",
         });
 
     } catch (error) {
@@ -88,9 +42,6 @@ export async function login (req, res){
         if(!userFound){
             return res.status(404).json ({ok:false,msg:"correo no registrado"});
         }
-        if(!userFound.verified){
-            return res.status(403).json({ok: false, msg : 'verifica tu cuenta primero'})
-        }
 
         const isValid = await bcrypt.compare(password, userFound.password);
 
@@ -98,7 +49,7 @@ export async function login (req, res){
           return res.status(400).json({ok: false , msg : "contrase\u00f1a incorrecta"});  
         }
 
-        const token = createToken({ id: userFound._id, email: userFound.email, verified : userFound.verified });
+        const token = createToken({ id: userFound._id, email: userFound.email });
 
         res.status(200).json({
           ok: true,
