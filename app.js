@@ -17,7 +17,10 @@ app.use(cors());
 
 app.use("/api/products", routerProduct);
 app.use("/api/users", routerUsers);
-app.use("/api/votes", routerVotes)
+app.use("/api/votes", routerVotes);
+app.use("/", (req, res)=>{
+  res.json({msg : 'Funciona'})
+})
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
