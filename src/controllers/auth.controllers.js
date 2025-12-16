@@ -41,7 +41,7 @@ export const registerUser = async (req, res) => {
         });
 
         
-        const verificationTokenLink = `http://localhost:4200/verify/${token}`;
+        const verificationTokenLink = `https://front-end-lake-five.vercel.app/verify/${token}`;
 
 
          const saltRounds = 10; //entre mas alto seguro 
